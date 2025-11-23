@@ -1,371 +1,423 @@
-<div align="center">
-  <img src="./.asset/grounding_dino_logo.png" width="30%">
+# Autoregressive Pre-training of Large Vision Encoders
+<div>
+<a href="https://arxiv.org/abs/2411.14402" target="_blank"><img alt="AIMv2 arXiv" src="https://img.shields.io/badge/arXiv-AIMv2-red?logo=arxiv"/></a>
+<a href="#aimv2-model-gallery"><img alt="AIMv2 model gallery" src="https://img.shields.io/badge/model_gallery-AIMv2-blue"/></a>
+<a href="https://arxiv.org/abs/2401.08541" target="_blank"><img alt="AIMv1 arXiv" src="https://img.shields.io/badge/arXiv-AIMv1-red?logo=arxiv"/></a>
+<a href="aim-v1/README.md#pre-trained-backbones"> <img alt="AIMv1 model gallery" src="https://img.shields.io/badge/model_gallery-AIMv1-blue"/></a>
 </div>
 
-# :sauropod: Grounding DINO 
+This repository is the entry point for all things AIM, a family of autoregressive models that push the boundaries of
+visual and multimodal learning:
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/grounding-dino-marrying-dino-with-grounded/zero-shot-object-detection-on-mscoco)](https://paperswithcode.com/sota/zero-shot-object-detection-on-mscoco?p=grounding-dino-marrying-dino-with-grounded) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/grounding-dino-marrying-dino-with-grounded/zero-shot-object-detection-on-odinw)](https://paperswithcode.com/sota/zero-shot-object-detection-on-odinw?p=grounding-dino-marrying-dino-with-grounded) \
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/grounding-dino-marrying-dino-with-grounded/object-detection-on-coco-minival)](https://paperswithcode.com/sota/object-detection-on-coco-minival?p=grounding-dino-marrying-dino-with-grounded) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/grounding-dino-marrying-dino-with-grounded/object-detection-on-coco)](https://paperswithcode.com/sota/object-detection-on-coco?p=grounding-dino-marrying-dino-with-grounded)
+- **AIMv2**: [`Multimodal Autoregressive Pre-training of Large Vision Encoders`](https://arxiv.org/abs/2411.14402)  [[`BibTeX`](#citation)]
+  <br>
+  Enrico Fini*, Mustafa Shukor*, Xiujun Li, Philipp Dufter, Michal Klein, David Haldimann, Sai Aitharaju,
+  Victor Guilherme Turrisi da Costa, Louis Béthune, Zhe Gan, Alexander T Toshev, Marcin Eichner, Moin Nabi, Yinfei Yang,
+  Joshua M. Susskind, and Alaaeldin El-Nouby*
+- **AIMv1**: [`Scalable Pre-training of Large Autoregressive Image Models`](https://arxiv.org/abs/2401.08541) [[`BibTeX`](#citation)]<br>
+  Alaaeldin El-Nouby, Michal Klein, Shuangfei Zhai, Miguel Angel Bautista, Alexander Toshev, Vaishaal Shankar,
+  Joshua M Susskind, Armand Joulin.
 
+*: Equal technical contribution
 
-**[IDEA-CVR, IDEA-Research](https://github.com/IDEA-Research)** 
+If you're looking for the original AIM model (AIMv1), please refer to the README [here](aim-v1/README.md).
 
-[Shilong Liu](http://www.lsl.zone/), [Zhaoyang Zeng](https://scholar.google.com/citations?user=U_cvvUwAAAAJ&hl=zh-CN&oi=ao), [Tianhe Ren](https://rentainhe.github.io/), [Feng Li](https://scholar.google.com/citations?user=ybRe9GcAAAAJ&hl=zh-CN), [Hao Zhang](https://scholar.google.com/citations?user=B8hPxMQAAAAJ&hl=zh-CN), [Jie Yang](https://github.com/yangjie-cv), [Chunyuan Li](https://scholar.google.com/citations?user=Zd7WmXUAAAAJ&hl=zh-CN&oi=ao), [Jianwei Yang](https://jwyang.github.io/), [Hang Su](https://scholar.google.com/citations?hl=en&user=dxN1_X0AAAAJ&view_op=list_works&sortby=pubdate), [Jun Zhu](https://scholar.google.com/citations?hl=en&user=axsP38wAAAAJ), [Lei Zhang](https://www.leizhang.org/)<sup>:email:</sup>.
+---
 
+## Overview of AIMv2
+We introduce the AIMv2 family of vision models pre-trained with a multimodal autoregressive objective.
+AIMv2 pre-training is simple and straightforward to train and to scale effectively. Some AIMv2 highlights include:
 
-[[`Paper`](https://arxiv.org/abs/2303.05499)] [[`Demo`](https://huggingface.co/spaces/ShilongLiu/Grounding_DINO_demo)] [[`BibTex`](#black_nib-citation)]
+1. Outperforms OAI CLIP and SigLIP on the majority of multimodal understanding benchmarks.
+2. Outperforms DINOv2 on open-vocabulary object detection and referring expression comprehension.
+3. Exhibits strong recognition performance with AIMv2-3B achieving *89.5% on ImageNet using a frozen trunk*.
 
+![gh_aimv2_dark](aim-v2/assets/aimv2_overview_dark.png#gh-dark-mode-only)
+![gh_aimv2_light](aim-v2/assets/aimv2_overview_light.png#gh-light-mode-only)
 
-PyTorch implementation and pretrained models for Grounding DINO. For details, see the paper **[Grounding DINO: Marrying DINO with Grounded Pre-Training for Open-Set Object Detection](https://arxiv.org/abs/2303.05499)**.
+## AIMv2 Model Gallery
+<div>
+<a href="#using-pytorch"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" height="25"/></a>
+<a href="#using-jax"><img alt="JAX" src="https://raw.githubusercontent.com/jax-ml/jax/main/images/jax_logo_250px.png" height="25"/></a>
+<a href="#using-mlx"><img alt="MLX" src="aim-v2/assets/mlx_logo_light.png" height="25"/></a>
+<a href="https://huggingface.co/collections/apple/aimv2-6720fe1558d94c7805f7688c"><img alt="HuggingFace" src="https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-md.svg" height="25"></a>
+</div>
 
-- 🔥 **[Grounded SAM 2](https://github.com/IDEA-Research/Grounded-SAM-2)** is released now, which combines Grounding DINO with [SAM 2](https://github.com/facebookresearch/segment-anything-2) for any object tracking in open-world scenarios.
-- 🔥 **[Grounding DINO 1.5](https://github.com/IDEA-Research/Grounding-DINO-1.5-API)** is released now, which is IDEA Research's **Most Capable** Open-World Object Detection Model!
-- 🔥 **[Grounding DINO](https://arxiv.org/abs/2303.05499)** and **[Grounded SAM](https://arxiv.org/abs/2401.14159)** are now supported in Huggingface. For more convenient use, you can refer to [this documentation](https://huggingface.co/docs/transformers/model_doc/grounding-dino)
+We share with the community AIMv2 pre-trained checkpoints of varying capacities, pre-training resolutions:
 
-## :sun_with_face: Helpful Tutorial
++ [[`AIMv2 with 224px`]](#aimv2-with-224px)
++ [[`AIMv2 with 336px`]](#aimv2-with-336px)
++ [[`AIMv2 with 448px`]](#aimv2-with-448px)
++ [[`AIMv2 with Native Resolution`]](#aimv2-with-native-resolution)
++ [[`AIMv2 distilled ViT-Large`]](#aimv2-distilled-vit-large) (*recommended for multimodal applications*)
++ [[`Zero-shot Adapted AIMv2`]](#zero-shot-adapted-aimv2)
 
-- :grapes: [[Read our arXiv Paper](https://arxiv.org/abs/2303.05499)]
-- :apple:  [[Watch our simple introduction video on YouTube](https://youtu.be/wxWDt5UiwY8)]
-- :blossom:   &nbsp;[[Try the Colab Demo](https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/zero-shot-object-detection-with-grounding-dino.ipynb)]
-- :sunflower: [[Try our Official Huggingface Demo](https://huggingface.co/spaces/ShilongLiu/Grounding_DINO_demo)]
-- :maple_leaf: [[Watch the Step by Step Tutorial about GroundingDINO by Roboflow AI](https://youtu.be/cMa77r3YrDk)]
-- :mushroom: [[GroundingDINO: Automated Dataset Annotation and Evaluation by Roboflow AI](https://youtu.be/C4NqaRBz_Kw)]
-- :hibiscus: [[Accelerate Image Annotation with SAM and GroundingDINO by Roboflow AI](https://youtu.be/oEQYStnF2l8)]
-- :white_flower: [[Autodistill: Train YOLOv8 with ZERO Annotations based on Grounding-DINO and Grounded-SAM by Roboflow AI](https://github.com/autodistill/autodistill)]
-
-<!-- Grounding DINO Methods | 
-[![arXiv](https://img.shields.io/badge/arXiv-2303.05499-b31b1b.svg)](https://arxiv.org/abs/2303.05499) 
-[![YouTube](https://badges.aleen42.com/src/youtube.svg)](https://youtu.be/wxWDt5UiwY8) -->
-
-<!-- Grounding DINO Demos |
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/zero-shot-object-detection-with-grounding-dino.ipynb) -->
-<!-- [![YouTube](https://badges.aleen42.com/src/youtube.svg)](https://youtu.be/cMa77r3YrDk)
-[![HuggingFace space](https://img.shields.io/badge/🤗-HuggingFace%20Space-cyan.svg)](https://huggingface.co/spaces/ShilongLiu/Grounding_DINO_demo)
-[![YouTube](https://badges.aleen42.com/src/youtube.svg)](https://youtu.be/oEQYStnF2l8)
-[![YouTube](https://badges.aleen42.com/src/youtube.svg)](https://youtu.be/C4NqaRBz_Kw) -->
-
-## :sparkles: Highlight Projects
-
-- [Semantic-SAM: a universal image segmentation model to enable segment and recognize anything at any desired granularity.](https://github.com/UX-Decoder/Semantic-SAM), 
-- [DetGPT: Detect What You Need via Reasoning](https://github.com/OptimalScale/DetGPT)
-- [Grounded-SAM: Marrying Grounding DINO with Segment Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything)
-- [Grounding DINO with Stable Diffusion](demo/image_editing_with_groundingdino_stablediffusion.ipynb)
-- [Grounding DINO with GLIGEN for Controllable Image Editing](demo/image_editing_with_groundingdino_gligen.ipynb)
-- [OpenSeeD: A Simple and Strong Openset Segmentation Model](https://github.com/IDEA-Research/OpenSeeD)
-- [SEEM: Segment Everything Everywhere All at Once](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once)
-- [X-GPT: Conversational Visual Agent supported by X-Decoder](https://github.com/microsoft/X-Decoder/tree/xgpt)
-- [GLIGEN: Open-Set Grounded Text-to-Image Generation](https://github.com/gligen/GLIGEN)
-- [LLaVA: Large Language and Vision Assistant](https://github.com/haotian-liu/LLaVA)
-
-<!-- Extensions | [Grounding DINO with Segment Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything); [Grounding DINO with Stable Diffusion](demo/image_editing_with_groundingdino_stablediffusion.ipynb); [Grounding DINO with GLIGEN](demo/image_editing_with_groundingdino_gligen.ipynb)  -->
-
-
-
-<!-- Official PyTorch implementation of [Grounding DINO](https://arxiv.org/abs/2303.05499), a stronger open-set object detector. Code is available now! -->
-
-
-## :bulb: Highlight
-
-- **Open-Set Detection.** Detect **everything** with language!
-- **High Performance.** COCO zero-shot **52.5 AP** (training without COCO data!). COCO fine-tune **63.0 AP**.
-- **Flexible.** Collaboration with Stable Diffusion for Image Editting.
-
-
-
-
-## :fire: News
-- **`2023/07/18`**: We release [Semantic-SAM](https://github.com/UX-Decoder/Semantic-SAM), a universal image segmentation model to enable segment and recognize anything at any desired granularity. **Code** and **checkpoint** are available!
-- **`2023/06/17`**: We provide an example to evaluate Grounding DINO on COCO zero-shot performance.
-- **`2023/04/15`**: Refer to [CV in the Wild Readings](https://github.com/Computer-Vision-in-the-Wild/CVinW_Readings) for those who are interested in open-set recognition!
-- **`2023/04/08`**: We release [demos](demo/image_editing_with_groundingdino_gligen.ipynb) to combine [Grounding DINO](https://arxiv.org/abs/2303.05499) with [GLIGEN](https://github.com/gligen/GLIGEN)  for more controllable image editings.
-- **`2023/04/08`**: We release [demos](demo/image_editing_with_groundingdino_stablediffusion.ipynb) to combine [Grounding DINO](https://arxiv.org/abs/2303.05499) with [Stable Diffusion](https://github.com/Stability-AI/StableDiffusion) for image editings.
-- **`2023/04/06`**: We build a new demo by marrying GroundingDINO with [Segment-Anything](https://github.com/facebookresearch/segment-anything) named **[Grounded-Segment-Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything)** aims to support segmentation in GroundingDINO.
-- **`2023/03/28`**: A YouTube [video](https://youtu.be/cMa77r3YrDk) about Grounding DINO and basic object detection prompt engineering. [[SkalskiP](https://github.com/SkalskiP)]
-- **`2023/03/28`**: Add a [demo](https://huggingface.co/spaces/ShilongLiu/Grounding_DINO_demo) on Hugging Face Space!
-- **`2023/03/27`**: Support CPU-only mode. Now the model can run on machines without GPUs.
-- **`2023/03/25`**: A [demo](https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/zero-shot-object-detection-with-grounding-dino.ipynb) for Grounding DINO is available at Colab. [[SkalskiP](https://github.com/SkalskiP)]
-- **`2023/03/22`**: Code is available Now!
-
-<details open>
-<summary><font size="4">
-Description
-</font></summary>
- <a href="https://arxiv.org/abs/2303.05499">Paper</a> introduction.
-<img src=".asset/hero_figure.png" alt="ODinW" width="100%">
-Marrying <a href="https://github.com/IDEA-Research/GroundingDINO">Grounding DINO</a> and <a href="https://github.com/gligen/GLIGEN">GLIGEN</a>
-<img src="https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/GD_GLIGEN.png" alt="gd_gligen" width="100%">
-</details>
-
-## :star: Explanations/Tips for Grounding DINO Inputs and Outputs
-- Grounding DINO accepts an `(image, text)` pair as inputs.
-- It outputs `900` (by default) object boxes. Each box has similarity scores across all input words. (as shown in Figures below.)
-- We defaultly choose the boxes whose highest similarities are higher than a `box_threshold`.
-- We extract the words whose similarities are higher than the `text_threshold` as predicted labels.
-- If you want to obtain objects of specific phrases, like the `dogs` in the sentence `two dogs with a stick.`, you can select the boxes with highest text similarities with `dogs` as final outputs. 
-- Note that each word can be split to **more than one** tokens with different tokenlizers. The number of words in a sentence may not equal to the number of text tokens.
-- We suggest separating different category names with `.` for Grounding DINO.
-![model_explain1](.asset/model_explan1.PNG)
-![model_explain2](.asset/model_explan2.PNG)
-
-## :label: TODO 
-
-- [x] Release inference code and demo.
-- [x] Release checkpoints.
-- [x] Grounding DINO with Stable Diffusion and GLIGEN demos.
-- [ ] Release training codes.
-
-## :hammer_and_wrench: Install 
-
-**Note:**
-
-0. If you have a CUDA environment, please make sure the environment variable `CUDA_HOME` is set. It will be compiled under CPU-only mode if no CUDA available.
-
-Please make sure following the installation steps strictly, otherwise the program may produce: 
-```bash
-NameError: name '_C' is not defined
+## Installation
+Please install PyTorch using the official [installation instructions](https://pytorch.org/get-started/locally/).
+Afterward, install the package as:
+```commandline
+pip install 'git+https://github.com/apple/ml-aim.git#subdirectory=aim-v1'
+pip install 'git+https://github.com/apple/ml-aim.git#subdirectory=aim-v2'
+```
+We also offer [MLX](https://ml-explore.github.io/mlx/) backend support for research and experimentation on Apple silicon.
+To enable MLX support, simply run:
+```commandline
+pip install mlx
 ```
 
-If this happened, please reinstalled the groundingDINO by reclone the git and do all the installation steps again.
- 
-#### how to check cuda:
-```bash
-echo $CUDA_HOME
-```
-If it print nothing, then it means you haven't set up the path/
+## Examples
 
-Run this so the environment variable will be set under current shell. 
-```bash
-export CUDA_HOME=/path/to/cuda-11.3
-```
-
-Notice the version of cuda should be aligned with your CUDA runtime, for there might exists multiple cuda at the same time. 
-
-If you want to set the CUDA_HOME permanently, store it using:
-
-```bash
-echo 'export CUDA_HOME=/path/to/cuda' >> ~/.bashrc
-```
-after that, source the bashrc file and check CUDA_HOME:
-```bash
-source ~/.bashrc
-echo $CUDA_HOME
-```
-
-In this example, /path/to/cuda-11.3 should be replaced with the path where your CUDA toolkit is installed. You can find this by typing **which nvcc** in your terminal:
-
-For instance, 
-if the output is /usr/local/cuda/bin/nvcc, then:
-```bash
-export CUDA_HOME=/usr/local/cuda
-```
-**Installation:**
-
-1.Clone the GroundingDINO repository from GitHub.
-
-```bash
-git clone https://github.com/IDEA-Research/GroundingDINO.git
-```
-
-2. Change the current directory to the GroundingDINO folder.
-
-```bash
-cd GroundingDINO/
-```
-
-3. Install the required dependencies in the current directory.
-
-```bash
-pip install -e .
-```
-
-4. Download pre-trained model weights.
-
-```bash
-mkdir weights
-cd weights
-wget -q https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth
-cd ..
-```
-
-## :arrow_forward: Demo
-Check your GPU ID (only if you're using a GPU)
-
-```bash
-nvidia-smi
-```
-Replace `{GPU ID}`, `image_you_want_to_detect.jpg`, and `"dir you want to save the output"` with appropriate values in the following command
-```bash
-CUDA_VISIBLE_DEVICES={GPU ID} python demo/inference_on_a_image.py \
--c groundingdino/config/GroundingDINO_SwinT_OGC.py \
--p weights/groundingdino_swint_ogc.pth \
--i image_you_want_to_detect.jpg \
--o "dir you want to save the output" \
--t "chair"
- [--cpu-only] # open it for cpu mode
-```
-
-If you would like to specify the phrases to detect, here is a demo:
-```bash
-CUDA_VISIBLE_DEVICES={GPU ID} python demo/inference_on_a_image.py \
--c groundingdino/config/GroundingDINO_SwinT_OGC.py \
--p ./groundingdino_swint_ogc.pth \
--i .asset/cat_dog.jpeg \
--o logs/1111 \
--t "There is a cat and a dog in the image ." \
---token_spans "[[[9, 10], [11, 14]], [[19, 20], [21, 24]]]"
- [--cpu-only] # open it for cpu mode
-```
-The token_spans specify the start and end positions of a phrases. For example, the first phrase is `[[9, 10], [11, 14]]`. `"There is a cat and a dog in the image ."[9:10] = 'a'`, `"There is a cat and a dog in the image ."[11:14] = 'cat'`. Hence it refers to the phrase `a cat` . Similarly, the `[[19, 20], [21, 24]]` refers to the phrase `a dog`.
-
-See the `demo/inference_on_a_image.py` for more details.
-
-**Running with Python:**
+### Using PyTorch
 
 ```python
-from groundingdino.util.inference import load_model, load_image, predict, annotate
-import cv2
+from PIL import Image
 
-model = load_model("groundingdino/config/GroundingDINO_SwinT_OGC.py", "weights/groundingdino_swint_ogc.pth")
-IMAGE_PATH = "weights/dog-3.jpeg"
-TEXT_PROMPT = "chair . person . dog ."
-BOX_TRESHOLD = 0.35
-TEXT_TRESHOLD = 0.25
+from aim.v2.utils import load_pretrained
+from aim.v1.torch.data import val_transforms
 
-image_source, image = load_image(IMAGE_PATH)
+img = Image.open(...)
+model = load_pretrained("aimv2-large-patch14-336", backend="torch")
+transform = val_transforms(img_size=336)
 
-boxes, logits, phrases = predict(
-    model=model,
-    image=image,
-    caption=TEXT_PROMPT,
-    box_threshold=BOX_TRESHOLD,
-    text_threshold=TEXT_TRESHOLD
-)
-
-annotated_frame = annotate(image_source=image_source, boxes=boxes, logits=logits, phrases=phrases)
-cv2.imwrite("annotated_image.jpg", annotated_frame)
-```
-**Web UI**
-
-We also provide a demo code to integrate Grounding DINO with Gradio Web UI. See the file `demo/gradio_app.py` for more details.
-
-**Notebooks**
-
-- We release [demos](demo/image_editing_with_groundingdino_gligen.ipynb) to combine [Grounding DINO](https://arxiv.org/abs/2303.05499) with [GLIGEN](https://github.com/gligen/GLIGEN)  for more controllable image editings.
-- We release [demos](demo/image_editing_with_groundingdino_stablediffusion.ipynb) to combine [Grounding DINO](https://arxiv.org/abs/2303.05499) with [Stable Diffusion](https://github.com/Stability-AI/StableDiffusion) for image editings.
-
-## COCO Zero-shot Evaluations
-
-We provide an example to evaluate Grounding DINO zero-shot performance on COCO. The results should be **48.5**.
-
-```bash
-CUDA_VISIBLE_DEVICES=0 \
-python demo/test_ap_on_coco.py \
- -c groundingdino/config/GroundingDINO_SwinT_OGC.py \
- -p weights/groundingdino_swint_ogc.pth \
- --anno_path /path/to/annoataions/ie/instances_val2017.json \
- --image_dir /path/to/imagedir/ie/val2017
+inp = transform(img).unsqueeze(0)
+features = model(inp)
 ```
 
+### Using MLX
+<details>
 
-## :luggage: Checkpoints
+```python
+from PIL import Image
+import mlx.core as mx
 
-<!-- insert a table -->
-<table>
+from aim.v2.utils import load_pretrained
+from aim.v1.torch.data import val_transforms
+
+img = Image.open(...)
+model = load_pretrained("aimv2-large-patch14-336", backend="mlx")
+transform = val_transforms(img_size=336)
+
+inp = transform(img).unsqueeze(0)
+inp = mx.array(inp.numpy())
+features = model(inp)
+```
+</details>
+
+### Using JAX
+
+<details>
+
+```python
+from PIL import Image
+import jax.numpy as jnp
+
+from aim.v2.utils import load_pretrained
+from aim.v1.torch.data import val_transforms
+
+img = Image.open(...)
+model, params = load_pretrained("aimv2-large-patch14-336", backend="jax")
+transform = val_transforms(img_size=336)
+
+inp = transform(img).unsqueeze(0)
+inp = jnp.array(inp)
+features = model.apply({"params": params}, inp)
+```
+</details>
+
+## Pre-trained Checkpoints
+The pre-trained models can be accessed via [HuggingFace Hub](https://huggingface.co/collections/apple/aimv2-6720fe1558d94c7805f7688c) as:
+```python
+from PIL import Image
+from transformers import AutoImageProcessor, AutoModel
+
+image = Image.open(...)
+processor = AutoImageProcessor.from_pretrained("apple/aimv2-large-patch14-336")
+model = AutoModel.from_pretrained("apple/aimv2-large-patch14-336", trust_remote_code=True)
+
+inputs = processor(images=image, return_tensors="pt")
+outputs = model(**inputs)
+```
+
+### AIMv2 with 224px
+<table style="margin: auto">
   <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>name</th>
-      <th>backbone</th>
-      <th>Data</th>
-      <th>box AP on COCO</th>
-      <th>Checkpoint</th>
-      <th>Config</th>
+    <tr>
+      <th>model_id</th>
+      <th>#params</th>
+      <th>IN-1k</th>
+      <th>HF Link</th>
+      <th>Backbone</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody align="center">
     <tr>
-      <th>1</th>
-      <td>GroundingDINO-T</td>
-      <td>Swin-T</td>
-      <td>O365,GoldG,Cap4M</td>
-      <td>48.4 (zero-shot) / 57.2 (fine-tune)</td>
-      <td><a href="https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth">GitHub link</a> | <a href="https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/groundingdino_swint_ogc.pth">HF link</a></td>
-      <td><a href="https://github.com/IDEA-Research/GroundingDINO/blob/main/groundingdino/config/GroundingDINO_SwinT_OGC.py">link</a></td>
+      <td>aimv2-large-patch14-224</td>
+      <td>0.3B</td>
+      <td>86.6</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-large-patch14-224" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-224/resolve/main/model.safetensors">link</a></td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>GroundingDINO-B</td>
-      <td>Swin-B</td>
-      <td>COCO,O365,GoldG,Cap4M,OpenImage,ODinW-35,RefCOCO</td>
-      <td>56.7 </td>
-      <td><a href="https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha2/groundingdino_swinb_cogcoor.pth">GitHub link</a>  | <a href="https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/groundingdino_swinb_cogcoor.pth">HF link</a> 
-      <td><a href="https://github.com/IDEA-Research/GroundingDINO/blob/main/groundingdino/config/GroundingDINO_SwinB_cfg.py">link</a></td>
+      <td>aimv2-huge-patch14-224</td>
+      <td>0.6B</td>
+      <td>87.5</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-huge-patch14-224" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-huge-patch14-224/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-1B-patch14-224</td>
+      <td>1.2B</td>
+      <td>88.1</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-1B-patch14-224" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-1B-patch14-224/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-3B-patch14-224</td>
+      <td>2.7B</td>
+      <td>88.5</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-3B-patch14-224" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-3B-patch14-224/resolve/main/model.safetensors">link</a></td>
     </tr>
   </tbody>
 </table>
 
-## :medal_military: Results
+### AIMv2 with 336px
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th>model_id</th>
+      <th>#params</th>
+      <th>IN-1k</th>
+      <th>HF Link</th>
+      <th>Backbone</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td>aimv2-large-patch14-336</td>
+      <td>0.3B</td>
+      <td>87.6</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-large-patch14-336" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-336/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-huge-patch14-336</td>
+      <td>0.6B</td>
+      <td>88.2</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-huge-patch14-336" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-huge-patch14-336/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-1B-patch14-336</td>
+      <td>1.2B</td>
+      <td>88.7</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-1B-patch14-336" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-1B-patch14-336/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-3B-patch14-336</td>
+      <td>2.7B</td>
+      <td>89.2</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-3B-patch14-336" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-3B-patch14-336/resolve/main/model.safetensors">link</a></td>
+    </tr>
+  </tbody>
+</table>
 
-<details open>
-<summary><font size="4">
-COCO Object Detection Results
-</font></summary>
-<img src=".asset/COCO.png" alt="COCO" width="100%">
-</details>
+### AIMv2 with 448px
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th>model_id</th>
+      <th>#params</th>
+      <th>IN-1k</th>
+      <th>HF Link</th>
+      <th>Backbone</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td>aimv2-large-patch14-448</td>
+      <td>0.3B</td>
+      <td>87.9</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-large-patch14-448">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-448/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-huge-patch14-448</td>
+      <td>0.6B</td>
+      <td>88.6</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-huge-patch14-448">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-huge-patch14-448/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-1B-patch14-448</td>
+      <td>1.2B</td>
+      <td>89.0</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-1B-patch14-448">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-1B-patch14-448/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-3B-patch14-448</td>
+      <td>2.7B</td>
+      <td>89.5</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-3B-patch14-448">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-3B-patch14-448/resolve/main/model.safetensors">link</a></td>
+    </tr>
+  </tbody>
+</table>
 
-<details open>
-<summary><font size="4">
-ODinW Object Detection Results
-</font></summary>
-<img src=".asset/ODinW.png" alt="ODinW" width="100%">
-</details>
+### AIMv2 with Native Resolution
+We additionally provide an AIMv2-L checkpoint that is finetuned to process a wide range of image resolutions and
+aspect ratios. Regardless of the aspect ratio, the image is patchified (patch_size=14) and
+*a 2D sinusoidal positional embedding* is added to the linearly projected input patches.
+*This checkpoint supports number of patches in the range of [112, 4096]*.
 
-<details open>
-<summary><font size="4">
-Marrying Grounding DINO with <a href="https://github.com/Stability-AI/StableDiffusion">Stable Diffusion</a> for Image Editing
-</font></summary>
-See our example <a href="https://github.com/IDEA-Research/GroundingDINO/blob/main/demo/image_editing_with_groundingdino_stablediffusion.ipynb">notebook</a> for more details.
-<img src=".asset/GD_SD.png" alt="GD_SD" width="100%">
-</details>
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th>model_id</th>
+      <th>#params</th>
+      <th>IN-1k</th>
+      <th>HF Link</th>
+      <th>Backbone</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td>aimv2-large-patch14-native</td>
+      <td>0.3B</td>
+      <td>87.3</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-large-patch14-native" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-native/resolve/main/model.safetensors">link</a></td>
+    </tr>
+  </tbody>
+</table>
 
+### AIMv2 distilled ViT-Large
+We provide an AIMv2-L checkpoint distilled from AIMv2-3B that provides a remarkable performance for multimodal
+understanding benchmarks.
 
-<details open>
-<summary><font size="4">
-Marrying Grounding DINO with <a href="https://github.com/gligen/GLIGEN">GLIGEN</a> for more Detailed Image Editing.
-</font></summary>
-See our example <a href="https://github.com/IDEA-Research/GroundingDINO/blob/main/demo/image_editing_with_groundingdino_gligen.ipynb">notebook</a> for more details.
-<img src=".asset/GD_GLIGEN.png" alt="GD_GLIGEN" width="100%">
-</details>
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>VQAv2</th>
+      <th>GQA</th>
+      <th>OKVQA</th>
+      <th>TextVQA</th>
+      <th>DocVQA</th>
+      <th>InfoVQA</th>
+      <th>ChartQA</th>
+      <th>SciQA</th>
+      <th>MMEp</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td>AIMv2-L</td>
+      <td>80.2</td>
+      <td>72.6</td>
+      <td>60.9</td>
+      <td>53.9</td>
+      <td>26.8</td>
+      <td>22.4</td>
+      <td>20.3</td>
+      <td>74.5</td>
+      <td>1457</td>
+     </tr>
+    <tr>
+      <td>AIMv2-L-distilled</td>
+      <td>81.1</td>
+      <td>73.0</td>
+      <td>61.4</td>
+      <td>53.5</td>
+      <td>29.2</td>
+      <td>23.3</td>
+      <td>24.0</td>
+      <td>76.3</td>
+      <td>1627</td>
+    </tr>
+  </tbody>
+</table>
 
-## :sauropod: Model: Grounding DINO
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th>model_id</th>
+      <th>#params</th>
+      <th>Res.</th>
+      <th>HF Link</th>
+      <th>Backbone</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td>aimv2-large-patch14-224-distilled</td>
+      <td>0.3B</td>
+      <td>224px</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-large-patch14-224-distilled" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-224-distilled/resolve/main/model.safetensors">link</a></td>
+    </tr>
+    <tr>
+      <td>aimv2-large-patch14-336-distilled</td>
+      <td>0.3B</td>
+      <td>336px</td>
+      <td>🤗<a href="https://huggingface.co/apple/aimv2-large-patch14-336-distilled" target="_blank">link</a></td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-336-distilled/resolve/main/model.safetensors">link</a></td>
+    </tr>
+  </tbody>
+</table>
 
-Includes: a text backbone, an image backbone, a feature enhancer, a language-guided query selection, and a cross-modality decoder.
+### Zero-shot Adapted AIMv2
+We provide the AIMv2-L vision and text encoders after LiT tuning to enable zero-shot recognition.
 
-![arch](.asset/arch.png)
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th>model</th>
+      <th>#params</th>
+      <th>zero-shot IN1-k</th>
+      <th>Backbone</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td>AIMv2-L</td>
+      <td>0.3B</td>
+      <td>77.0</td>
+      <td><a href="https://huggingface.co/apple/aimv2-large-patch14-224-lit/resolve/main/model.safetensors">link</a></td>
+    </tr>
+  </tbody>
+</table>
 
+## Citation
+If you find our work useful, please consider citing us as:
 
-## :hearts: Acknowledgement
-
-Our model is related to [DINO](https://github.com/IDEA-Research/DINO) and [GLIP](https://github.com/microsoft/GLIP). Thanks for their great work!
-
-We also thank great previous work including DETR, Deformable DETR, SMCA, Conditional DETR, Anchor DETR, Dynamic DETR, DAB-DETR, DN-DETR, etc. More related work are available at [Awesome Detection Transformer](https://github.com/IDEACVR/awesome-detection-transformer). A new toolbox [detrex](https://github.com/IDEA-Research/detrex) is available as well.
-
-Thanks [Stable Diffusion](https://github.com/Stability-AI/StableDiffusion) and [GLIGEN](https://github.com/gligen/GLIGEN) for their awesome models.
-
-
-## :black_nib: Citation
-
-If you find our work helpful for your research, please consider citing the following BibTeX entry.   
+### AIMv2 bibtex
 
 ```bibtex
-@article{liu2023grounding,
-  title={Grounding dino: Marrying dino with grounded pre-training for open-set object detection},
-  author={Liu, Shilong and Zeng, Zhaoyang and Ren, Tianhe and Li, Feng and Zhang, Hao and Yang, Jie and Li, Chunyuan and Yang, Jianwei and Su, Hang and Zhu, Jun and others},
-  journal={arXiv preprint arXiv:2303.05499},
-  year={2023}
+@misc{fini2024multimodal,
+    title={Multimodal Autoregressive Pre-training of Large Vision Encoders},
+    author={Enrico Fini and Mustafa Shukor and Xiujun Li and Philipp Dufter and Michal Klein and David Haldimann and Sai Aitharaju and Victor Guilherme Turrisi da Costa and Louis Béthune and Zhe Gan and Alexander T Toshev and Marcin Eichner and Moin Nabi and Yinfei Yang and Joshua M. Susskind and Alaaeldin El-Nouby},
+    year={2024},
+    eprint={2411.14402},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
 }
 ```
 
+### AIMv1 bibtex
 
+```bibtex
+@InProceedings{pmlr-v235-el-nouby24a,
+  title     = {Scalable Pre-training of Large Autoregressive Image Models},
+  author    = {El-Nouby, Alaaeldin and Klein, Michal and Zhai, Shuangfei and Bautista, Miguel \'{A}ngel and Shankar, Vaishaal and Toshev, Alexander T and Susskind, Joshua M. and Joulin, Armand},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  pages     = {12371--12384},
+  year      = {2024},
+}
+```
 
-
+## License
+Please check out the repository [LICENSE](LICENSE) before using the provided code and models.

@@ -1,0 +1,30 @@
+from PIL import Image
+from transformers import AutoImageProcessor, AutoModel
+
+# Path to the image
+image_path = "/mnt/k/ml-aim/pest.1.jpg" 
+
+try:
+    # Load the image
+    image = Image.open(image_path).convert("RGB")
+    print("Image loaded successfully.")
+except FileNotFoundError:
+    print(f"Error: The file at {image_path} was not found.")
+    exit()
+
+# Load the pretrained processor and model
+print("Loading the pretrained model and processor...")
+processor = AutoImageProcessor.from_pretrained("apple/aimv2-large-patch14-336")
+model = AutoModel.from_pretrained("apple/aimv2-large-patch14-336", trust_remote_code=True)
+
+# Process the image and prepare inputs for the model
+print("Processing the image...")
+inputs = processor(images=image, return_tensors="pt")
+
+# Perform inference
+print("Performing inference...")
+outputs = model(**inputs)
+
+# Print the outputs
+print("Model outputs:")
+print(outputs)
